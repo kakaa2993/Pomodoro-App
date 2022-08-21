@@ -1,3 +1,3 @@
 # Pomodoro App
 
-an application for productivity, written in python programing language and build with Tkinter library.
+An application for productivity, written in python programing language and build with Tkinter library.
