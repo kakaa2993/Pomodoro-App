@@ -11,6 +11,9 @@ WORK_MIN = 1
 SHORT_BREAK_MIN = 2
 LONG_BREAK_MIN = 20
 reps = 0
+restart_counting = False
+
+
 # CREATE THE WINDOWS
 windows = Tk()
 windows.title(string='Pomodoro APP')
@@ -23,7 +26,8 @@ windows.config(padx=100, pady=50, background=YELLOW)
 
 
 def start_timer():
-    global reps
+    global reps,restart_counting
+    restart_counting = False
     work_sec = WORK_MIN * 60
     short_break_sec = SHORT_BREAK_MIN * 60
     long_break_sec = LONG_BREAK_MIN * 60
@@ -41,18 +45,29 @@ def start_timer():
 
 
 def count_down(count):
-    global reps
+    global reps,restart_counting
     count_min = math.floor(count / 60)
     count_sec = count % 60
     if count > 0:
         windows.after(1000, count_down, count - 1)
-    canvas.itemconfig(start_time, text=f"{count_min:02d}:{count_sec:02d}")
-    if count == 0 and reps != 7:
-        start_timer()
-        if reps % 2 == 0:
-            sessions.append("✔")
-            check_marks.config(text=f"{' '.join(sessions)}")
+    if restart_counting != True:
+        canvas.itemconfig(start_time, text=f"{count_min:02d}:{count_sec:02d}")
+        if count == 0 and reps != 7:
+            start_timer()
+            if reps % 2 == 0:
+                sessions.append("✔")
+                check_marks.config(text=f"{' '.join(sessions)}")
 
+    else:
+        windows.after(1000,count_down, 0)
+def restart_timer():
+    global sessions, restart_counting, reps
+    sessions = []
+    reps = 0
+    check_marks.config(text=f"{' '.join(sessions)}")
+    title_label.config(text="Timer", fg=GREEN)
+    canvas.itemconfig(start_time,text="00:00")
+    restart_counting = True
 
 
 # Create the tomato image
@@ -69,27 +84,6 @@ title_label.grid(column=1, row=0)
 sessions = []
 
 
-# def start_timer():
-#     seconds = 0
-#     minutes = 0
-#     while minutes < WORK_MIN:
-#         seconds += 1
-#         if seconds == 60:
-#             minutes += 1
-#             seconds = 0
-#         canvas.itemconfig(start_time, text=f"{minutes:02d}:{seconds:02d}")
-#         canvas.update()
-#         time.sleep(1)
-#         print(seconds)
-#     if minutes >= WORK_MIN:
-#         sessions.append("✔")
-#         check_marks.config(text=f"{' '.join(sessions)}")
-
-
-def restart_timer():
-    global sessions
-    sessions = []
-    check_marks.config(text=f"{' '.join(sessions)}")
 
 
 # Create Start button
@@ -101,7 +95,7 @@ restart = Button(text="Restart", command=restart_timer, highlightthickness=0)
 restart.grid(column=2, row=2)
 
 # Create Check marks
-check_marks = Label(text=f"{' '.join(sessions)}", foreground=GREEN, bg=YELLOW)
+check_marks = Label(foreground=GREEN, bg=YELLOW)
 check_marks.grid(column=1, row=3)
 
 windows.mainloop()
