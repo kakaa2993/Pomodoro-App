@@ -10,7 +10,7 @@ FONT_NAME = "Courier"
 WORK_MIN = 1
 SHORT_BREAK_MIN = 2
 LONG_BREAK_MIN = 20
-rep = 0
+reps = 0
 # CREATE THE WINDOWS
 windows = Tk()
 windows.title(string='Pomodoro APP')
@@ -23,35 +23,35 @@ windows.config(padx=100, pady=50, background=YELLOW)
 
 
 def start_timer():
-    global rep
+    global reps
     work_sec = WORK_MIN * 60
     short_break_sec = SHORT_BREAK_MIN * 60
     long_break_sec = LONG_BREAK_MIN * 60
-    if rep == 0:
+    if reps % 2 == 0:
+        title_label.config(text="Work", fg=RED)
         count_down(work_sec)
-        sessions.append("✔")
-        check_marks.config(text=f"{' '.join(sessions)}")
-    elif rep % 2 == 0:
-        count_down(work_sec)
-        sessions.append("✔")
-        check_marks.config(text=f"{' '.join(sessions)}")
-    elif rep % 7 == 0:
-        count_down(long_break_sec)
-    elif rep % 2 == 1:
+    elif reps % 2 == 1:
         count_down(short_break_sec)
-    print(rep)
-    rep += 1
+        title_label.config(text="Break", fg=PINK)
+    elif reps % 7 == 0:
+        count_down(long_break_sec)
+        title_label.config(text="Long Break", fg=GREEN)
+    print(reps)
+    reps += 1
 
 
 def count_down(count):
-    global rep
+    global reps
     count_min = math.floor(count / 60)
     count_sec = count % 60
     if count > 0:
         windows.after(1000, count_down, count - 1)
     canvas.itemconfig(start_time, text=f"{count_min:02d}:{count_sec:02d}")
-    if count == 0 and rep != 7:
+    if count == 0 and reps != 7:
         start_timer()
+        if reps % 2 == 0:
+            sessions.append("✔")
+            check_marks.config(text=f"{' '.join(sessions)}")
 
 
 
@@ -63,8 +63,8 @@ start_time = canvas.create_text(102, 135, text="00:00", font=(FONT_NAME, 30, "bo
 canvas.grid(column=1, row=1)
 
 # Create timer
-timer = Label(text="Timer", font=(FONT_NAME, 50), fg=GREEN, bg=YELLOW)
-timer.grid(column=1, row=0)
+title_label = Label(text="Timer", font=(FONT_NAME, 50), fg=GREEN, bg=YELLOW)
+title_label.grid(column=1, row=0)
 
 sessions = []
 
