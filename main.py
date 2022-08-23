@@ -26,7 +26,7 @@ windows.config(padx=100, pady=50, background=YELLOW)
 
 
 def start_timer():
-    global reps,restart_counting
+    global reps, restart_counting
     restart_counting = False
     work_sec = WORK_MIN * 60
     short_break_sec = SHORT_BREAK_MIN * 60
@@ -45,12 +45,13 @@ def start_timer():
 
 
 def count_down(count):
-    global reps,restart_counting
+    global reps, restart_counting
     count_min = math.floor(count / 60)
     count_sec = count % 60
     if count > 0:
         windows.after(1000, count_down, count - 1)
-    if restart_counting != True:
+
+    if not restart_counting:
         canvas.itemconfig(start_time, text=f"{count_min:02d}:{count_sec:02d}")
         if count == 0 and reps != 7:
             start_timer()
@@ -59,14 +60,16 @@ def count_down(count):
                 check_marks.config(text=f"{' '.join(sessions)}")
 
     else:
-        windows.after(1000,count_down, 0)
+        windows.after(1000, count_down, 0)
+
+
 def restart_timer():
     global sessions, restart_counting, reps
     sessions = []
     reps = 0
     check_marks.config(text=f"{' '.join(sessions)}")
     title_label.config(text="Timer", fg=GREEN)
-    canvas.itemconfig(start_time,text="00:00")
+    canvas.itemconfig(start_time, text="00:00")
     restart_counting = True
 
 
@@ -82,8 +85,6 @@ title_label = Label(text="Timer", font=(FONT_NAME, 50), fg=GREEN, bg=YELLOW)
 title_label.grid(column=1, row=0)
 
 sessions = []
-
-
 
 
 # Create Start button
