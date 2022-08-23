@@ -11,7 +11,7 @@ WORK_MIN = 1
 SHORT_BREAK_MIN = 2
 LONG_BREAK_MIN = 20
 reps = 0
-restart_counting = False
+timer = ""
 
 
 # CREATE THE WINDOWS
@@ -26,8 +26,7 @@ windows.config(padx=100, pady=50, background=YELLOW)
 
 
 def start_timer():
-    global reps, restart_counting
-    restart_counting = False
+    global reps
     work_sec = WORK_MIN * 60
     short_break_sec = SHORT_BREAK_MIN * 60
     long_break_sec = LONG_BREAK_MIN * 60
@@ -45,29 +44,28 @@ def start_timer():
 
 
 def count_down(count):
-    global reps, restart_counting
+    global reps, timer
     count_min = math.floor(count / 60)
     count_sec = count % 60
 
-    if not restart_counting:
-        if count > 0:
-            windows.after(1000, count_down, count - 1)
-        canvas.itemconfig(start_time, text=f"{count_min:02d}:{count_sec:02d}")
-        if count == 0 and reps != 7:
-            start_timer()
-            if reps % 2 == 0:
-                sessions.append("✔")
-                check_marks.config(text=f"{' '.join(sessions)}")
+    if count > 0:
+        timer = windows.after(1000, count_down, count - 1)
+    canvas.itemconfig(start_time, text=f"{count_min:02d}:{count_sec:02d}")
+    if count == 0 and reps != 7:
+        start_timer()
+        if reps % 2 == 0:
+            sessions.append("✔")
+            check_marks.config(text=f"{' '.join(sessions)}")
 
 
 def restart_timer():
-    global sessions, restart_counting, reps
+    global sessions, reps, timer
     sessions = []
     reps = 0
     check_marks.config(text=f"{' '.join(sessions)}")
     title_label.config(text="Timer", fg=GREEN)
     canvas.itemconfig(start_time, text="00:00")
-    restart_counting = True
+    windows.after_cancel(timer)
 
 
 # Create the tomato image
