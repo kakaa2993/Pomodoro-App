@@ -48,19 +48,16 @@ def count_down(count):
     global reps, restart_counting
     count_min = math.floor(count / 60)
     count_sec = count % 60
-    if count > 0:
-        windows.after(1000, count_down, count - 1)
 
     if not restart_counting:
+        if count > 0:
+            windows.after(1000, count_down, count - 1)
         canvas.itemconfig(start_time, text=f"{count_min:02d}:{count_sec:02d}")
         if count == 0 and reps != 7:
             start_timer()
             if reps % 2 == 0:
                 sessions.append("✔")
                 check_marks.config(text=f"{' '.join(sessions)}")
-
-    else:
-        windows.after(1000, count_down, 0)
 
 
 def restart_timer():
