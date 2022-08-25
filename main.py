@@ -26,6 +26,8 @@ windows.config(padx=100, pady=50, background=YELLOW)
 # long break 7
 
 mixer.init()
+
+
 def play_music(music_type):
     if music_type == "Break":
         mixer.music.load("./sound/alarm-clock-short-6402.mp3")
@@ -33,6 +35,7 @@ def play_music(music_type):
     elif music_type == "Start work":
         mixer.music.load("./sound/ready-fight-37973.mp3")
         mixer.music.play(loops=0)
+
 
 def start_timer():
     global reps
