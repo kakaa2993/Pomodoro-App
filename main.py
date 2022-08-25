@@ -1,5 +1,6 @@
 from tkinter import *
 import math
+from pygame import mixer
 
 FONT = 'Time new roman'
 PINK = "#e2979c"
@@ -24,6 +25,14 @@ windows.config(padx=100, pady=50, background=YELLOW)
 # work 0,2,4,6
 # long break 7
 
+mixer.init()
+def play_music(music_type):
+    if music_type == "Break":
+        mixer.music.load("./sound/alarm-clock-short-6402.mp3")
+        mixer.music.play(loops=0)
+    elif music_type == "Start work":
+        mixer.music.load("./sound/ready-fight-37973.mp3")
+        mixer.music.play(loops=0)
 
 def start_timer():
     global reps
@@ -32,14 +41,17 @@ def start_timer():
     long_break_sec = LONG_BREAK_MIN * 60
     if reps % 2 == 0:
         title_label.config(text="Work", fg=RED)
+        play_music("Start work")
         count_down(work_sec)
     elif reps % 2 == 1:
+        play_music("Break")
         count_down(short_break_sec)
         title_label.config(text="Break", fg=PINK)
     elif reps % 7 == 0:
+        play_music("Break")
         count_down(long_break_sec)
         title_label.config(text="Long Break", fg=GREEN)
-    print(reps)
+    # print(reps)
     reps += 1
 
 
