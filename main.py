@@ -5,8 +5,8 @@ from pygame import mixer
 FONT = 'Time new roman'
 PINK = "#e2979c"
 RED = "#e7305b"
-GREEN = "#9bdeac"
-YELLOW = "#f7f5dd"
+TITLE_BACKGROUND = "#F7A76C"
+BACKGROUND = "#C3FF99"
 FONT_NAME = "Courier"
 WORK_MIN = 25
 SHORT_BREAK_MIN = 5
@@ -18,7 +18,7 @@ timer = ""
 # CREATE THE WINDOWS
 windows = Tk()
 windows.title(string='Pomodoro APP')
-windows.config(padx=100, pady=50, background=YELLOW)
+windows.config(padx=100, pady=50, background=BACKGROUND)
 
 # 25 , sort break ,25 , short break,25 , short break,25 , long break
 # short break 1, 3, 5
@@ -53,7 +53,7 @@ def start_timer():
     elif reps % 7 == 0:
         play_music("Break")
         count_down(long_break_sec)
-        title_label.config(text="Long Break", fg=GREEN)
+        title_label.config(text="Long Break", fg=TITLE_BACKGROUND)
     # print(reps)
     reps += 1
 
@@ -78,35 +78,35 @@ def restart_timer():
     sessions = []
     reps = 0
     check_marks.config(text=f"{' '.join(sessions)}")
-    title_label.config(text="Timer", fg=GREEN)
+    title_label.config(text="Timer", fg=TITLE_BACKGROUND)
     canvas.itemconfig(start_time, text="00:00")
     windows.after_cancel(timer)
 
 
 # Create the tomato image
-canvas = Canvas(width=200, height=223, background=YELLOW, highlightthickness=0)
-tomato_image = PhotoImage(file='tomato.png')
+canvas = Canvas(width=200, height=223, background=BACKGROUND, highlightthickness=0)
+tomato_image = PhotoImage(file='./images/tomato.png')
 canvas.create_image(100, 112, image=tomato_image)
 start_time = canvas.create_text(102, 135, text="00:00", font=(FONT_NAME, 30, "bold"), fill="white")
 canvas.grid(column=1, row=1)
 
 # Create timer
-title_label = Label(text="Timer", font=(FONT_NAME, 50), fg=GREEN, bg=YELLOW)
+title_label = Label(text="Timer", font=(FONT_NAME, 50), fg=TITLE_BACKGROUND, bg=BACKGROUND)
 title_label.grid(column=1, row=0)
 
 sessions = []
 
 
 # Create Start button
-start = Button(text="Start", command=start_timer, highlightthickness=0)
+start = Button(text="Start", command=start_timer, highlightthickness=0, bg="#E0D98C")
 start.grid(column=0, row=2)
 
 # Create Restart button
-restart = Button(text="Restart", command=restart_timer, highlightthickness=0)
+restart = Button(text="Restart", command=restart_timer, highlightthickness=0, bg="#E0D98C")
 restart.grid(column=2, row=2)
 
 # Create Check marks
-check_marks = Label(foreground=GREEN, bg=YELLOW)
+check_marks = Label(foreground=TITLE_BACKGROUND, bg=BACKGROUND)
 check_marks.grid(column=1, row=3)
 
 windows.mainloop()
